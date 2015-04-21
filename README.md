@@ -1,2 +1,4 @@
 # jobtracking
-express inteface to a mysql notes database
+express interface to a mysql notes database.  
+
+

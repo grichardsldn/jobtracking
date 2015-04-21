@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title><%= title %></title>
+  </head>
+  <body>
+    <table>
+      <% for (var i=0; i < jobs.length; i++) { %> 
+      <tr>
+        <td><a href='show/<%= jobs[i].id %>'><%= jobs[i].id %><a></td>
+        <% if ( showstate ) { %>
+        <td><%= jobs[i].state %></td>
+        <% } %>
+        <td>
+          <% if ( jobs[i].recent ) { %> <strong><% } %>
+          <%= jobs[i].title %>
+          <% if ( jobs[i].recent ) { %></strong><% } %>
+        </td>
+      </tr>  
+      <% } %>
+    </table>
+    <div>
+      <p> <a href="/create">Create New</a></p>
+    </div>
+  </body>
+</html>

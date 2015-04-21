@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>Create new</title>
+  </head>
+  <body>
+    <h2>Create new entry</h2>
+    <form 
+      name='createjob'
+      method='POST'
+      action='/addjob'>
+      <p>
+        <b>Title:</b>
+        <br>
+        <textarea cols=80 rows=1 name="title"></textarea>
+      </p>
+      <p>
+        <b>Keywords:</b>
+        <br>
+        <textarea cols=80 rows=1 name="keywords"></textarea>
+      </p>
+      <b>Description:</b>
+      <br>
+      <textarea cols=80 rows=5 wrap="physical" name="description"></textarea>
+      <p><input type="submit" value="Create"/></p>
+    </form>
+  </body>
+</html>

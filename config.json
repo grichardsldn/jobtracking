@@ -1,0 +1,7 @@
+{ 
+  "database" : "jobtracking",
+  "host"     : "spot",
+  "user"     : "",
+  "password" : ""
+}
+

@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title><%= jobinfo.id %> <%= jobinfo.state %> <%= jobinfo.title %></title>
+  </head>
+  <body>
+    <h2>
+      <%= jobinfo.id %>: <%= jobinfo.state %>: <%= jobinfo.title %>
+    </h2>
+    <a href='#end'>Jump to end of document</a>
+    <a href='/open'>Show open jobs</a>
+    <a href='/all'>Show all jobs</a>
+    <br><br>    
+    <b>Keywords:</b> <%= jobinfo.keywords %>
+    <h2>
+      Description:
+    </h2>
+    <%= jobinfo.description %>
+    <h2>History:</h2>
+
+    <% for( var i=0; i < entries.length ; i++) { %>
+    <p><b><%= entries[i].timestamp.toString() %>:</b>
+    <p><pre><%= entries[i].entry %></pre>
+    <% } %>
+    <a name='end'/>
+    <form 
+      name='createentry'
+      method='POST'
+      action='/addentry/<%= jobinfo.id %>'>
+      <textarea cols=80 rows=25 name="entry" wrap=physical></textarea>
+      <p><%= jobinfo.id %>: <%= jobinfo.state %>: <%= jobinfo.title %><p>
+      <p><input type="submit" value="Add Entry"/></p>
+    </form>
+    <a href='#end'>Jump to end of document</a>
+    <a href='/open'>Show open jobs</a>
+    <a href='/all'>Show all jobs</a>
+    
+  </body>
+</html>
