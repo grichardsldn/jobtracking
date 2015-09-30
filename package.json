@@ -1,0 +1,17 @@
+{
+  "name": "jobtracking",
+  "description": "Ticket tracking system",
+  "author": "",
+  "dependencies": {
+    "body-parser": "1.14.1",
+    "ejs": "2.3.4",
+    "express": "4.13.3",
+    "log4js": "0.6.27",
+    "mysql": "2.9.0",
+    "sql": "0.60.0"
+  },
+  "devDependencies": {
+  },
+  "engine": "node >= 0.10.25"
+}
+

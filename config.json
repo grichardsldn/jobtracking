@@ -1,7 +1,7 @@
 { 
   "database" : "jobtracking",
-  "host"     : "spot",
-  "user"     : "",
+  "host"     : "localhost",
+  "user"     : "root",
   "password" : ""
 }
 
