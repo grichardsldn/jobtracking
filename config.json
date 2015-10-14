@@ -1,7 +1,0 @@
-{ 
-  "database" : "jobtracking",
-  "host"     : "localhost",
-  "user"     : "root",
-  "password" : ""
-}
-
