@@ -1,5 +1,15 @@
 'use strict';
 
+
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('new.cert.key', 'utf8');
+var certificate = fs.readFileSync('new.cert.cert', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+
+
 var log4js = require('log4js');
 
 log4js.loadAppender('file');
@@ -46,7 +56,12 @@ fs.readFile( config_filename, 'utf8', function( err, data ) {
     ctrl.config( model, config, app );
     ctrl.add_controllers();
 
-    app.listen(3000);
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+httpServer.listen(3000);
+//httpsServer.listen(8765);
+
+   // app.listen(3000);
   }
 });
 

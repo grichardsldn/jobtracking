@@ -1,3 +1,5 @@
-/log/*
+/logs/*
 *.swp
 node_modules/
+new.cert.cert
+new.cert.key
