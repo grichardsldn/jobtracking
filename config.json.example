@@ -1,0 +1,11 @@
+{ 
+  "database" : "jobtracking",
+  "host"     : "localhost",
+  "user"     : "root",
+  "password" : "",
+
+  "users" : {
+    "graham": "some_password"
+  }
+}
+
