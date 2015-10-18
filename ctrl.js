@@ -12,22 +12,33 @@ module.exports = ( function() {
     logger.trace( req.method + ':' + req.url );
   };
 
-  var sessions = {};
+  var sessions = {}; // { token: { user, timestamp } }
 
   var new_session = function( user ) {
     var token = 'a' + Math.floor(Math.random() * 1000000000);
-    sessions[token] = user;
+    sessions[token] = { 
+      user: user,
+      timestamp: new Date().getTime() 
+    };
     return token;
   };
- 
+
+  // see if time given has expired based on config.session_timeout_mins
+  var is_expired = function( timestamp ) {
+    var expire_time = timestamp + config.session_timeout_mins * 60 * 1000;
+    var time_now = new Date().getTime();
+    return ( expire_time < time_now );
+  };
+
   var auth = function( req, res, next ) {
     logger.trace("auth:");
     var ok = false;
     var token = req.cookies.jtsession;
     if( token ) {
       logger.trace("jtsession was " + token );
-      if( token in sessions ) {
-        var user = sessions[token];
+      if( token in sessions && !is_expired( sessions[token].timestamp) ) {
+        var user = sessions[token].user;
+        sessions[token].timeout = new Date().getTime();
         logger.trace("session token was for user " + user );
         ok = true;
       } else {

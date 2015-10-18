@@ -6,6 +6,7 @@
 
   "users" : {
     "graham": "some_password"
-  }
+  },
+  "session_timeout_mins": 5
 }
 
