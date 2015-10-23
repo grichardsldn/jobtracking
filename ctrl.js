@@ -125,12 +125,25 @@ module.exports = ( function() {
         logger.info("Showing job " + id );
 
         model.do( 'getjobinfo', { id: id }, function( getjobinfo ) {
+          var next_state = (getjobinfo.jobinfo.state == 'OPEN') ? 'CLOSED' : 'OPEN';
           model.do( 'getentriesforjob', { job_id: id }, function(getentries) {
-            res.render('show', { 
-              jobinfo: getjobinfo.jobinfo, 
+            res.render('show', {
+              jobinfo: getjobinfo.jobinfo,
+              next_state: next_state,
               entries: getentries.entries });
             model.do( 'updateaccess', { job_id: id }, function() {} );
           });
+        });
+      });
+
+      app.get('/command/setstate/:id/:oldstate/:newstate', auth, function( req, res ) {
+        trace_req ( req );
+        var id = req.params.id;
+        var oldstate = req.params.oldstate;
+        var newstate = req.params.newstate;
+        model.do( 'setstate', { id: id, oldstate: oldstate, newstate: newstate }, function( ok ) {
+          // ingore whether it worked
+          res.redirect( '/show/' + id  );
         });
       });
 

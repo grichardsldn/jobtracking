@@ -30,6 +30,12 @@
       <p><%= jobinfo.id %>: <%= jobinfo.state %>: <%= jobinfo.title %><p>
       <p><input type="submit" value="Add Entry"/></p>
     </form>
+    <form
+      name='setstate'
+      method='GET'
+      action='/command/setstate/<%= jobinfo.id %>/<%= jobinfo.state %>/<%= next_state %>'>
+      <p><input type='submit' value="Move to <%= next_state %>"></p>
+    </form>
     <a href='#end'>Jump to end of document</a>
     <a href='/open'>Show open jobs</a>
     <a href='/all'>Show all jobs</a>

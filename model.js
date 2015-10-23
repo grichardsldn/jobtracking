@@ -76,6 +76,29 @@ module.exports = ( function() {
     } );
   };
 
+  // id:
+  // oldstate:
+  // newstate:
+  var setstate = function( params, callback ) {
+    var query = jobtable
+      .update( { state: params.newstate  } )
+      .where(
+        jobtable.id.equals(params.id)
+        .and(jobtable.state.equals( params.oldstate)) ) ;
+    log_query( query ); 
+
+    connection.query( query.toQuery('mysql').text, query.toQuery().values, 
+      function( err )  {
+      if (err) {
+        logger.error( err );
+        throw err;
+      }
+      callback( { 
+        params: params, 
+      } );
+    } );
+  };
+
   // id: <job id>
   var getjobinfo = function( params, callback ) {
     var query = jobtable
@@ -222,8 +245,7 @@ module.exports = ( function() {
         me.connect( db_params );
       });
     },
- 
-    // countjobs countentries 
+
     do : function( command, params, callback ) {
       var cmds = { 
         listjobs: listjobs,
@@ -232,6 +254,7 @@ module.exports = ( function() {
         addentry: addentry,
         updateaccess: updateaccess,
         addjob: addjob,
+        setstate: setstate
       };
       return cmds[command]( params, callback );
     },
