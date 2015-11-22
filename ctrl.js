@@ -38,7 +38,7 @@ module.exports = ( function() {
       logger.trace("jtsession was " + token );
       if( token in sessions && !is_expired( sessions[token].timestamp) ) {
         var user = sessions[token].user;
-        sessions[token].timeout = new Date().getTime();
+        sessions[token].timestamp = new Date().getTime();
         logger.trace("session token was for user " + user );
         ok = true;
       } else {
