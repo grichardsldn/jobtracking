@@ -12,11 +12,11 @@ var credentials = {key: privateKey, cert: certificate};
 
 var log4js = require('log4js');
 
-log4js.loadAppender('file');
-//log4js.addAppender(log4js.appenders.console()); 
-log4js.addAppender(log4js.appenders.file('logs/jobtracking.log'));
 
-log4js.setGlobalLogLevel('TRACE');
+log4js.configure({
+  appenders: { logfile: { type: 'file', filename: 'logs/jobtracking.log' } },
+  categories: { default: { appenders: ['logfile'], level: 'trace' } }
+});
 
 var logger = log4js.getLogger();
 
