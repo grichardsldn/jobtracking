@@ -64,7 +64,7 @@ module.exports = ( function() {
         var recent = false;
         if( rows[i].last_access !== null ) {
           var access_tick = rows[i].last_access.getTime();
-          var lastweek_tick = Date.now() - ( 3600 * 25 * 7 * 1000);
+          var lastweek_tick = Date.now() - ( 3600 * 24 * 40 * 1000);
           recent = (access_tick > lastweek_tick)?true:false;
         }
         rows[i].recent = recent;
