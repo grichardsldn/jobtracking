@@ -111,6 +111,7 @@ module.exports = ( function() {
      }).where( { 
       state: params.state 
      } ).leftJoin( 'last_access', { 'job.id': 'last_access.job_ref'} )
+      .orderBy( 'id', 'DESC' )
       .then(function(coll){
       coll.map( function(e) { 
         let recent = false;
