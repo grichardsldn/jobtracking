@@ -107,10 +107,21 @@ module.exports = ( function() {
       id: 'id',
       title: 'title',
       state: 'state',
+      last_access: 'last_access.last_access',
      }).where( { 
       state: params.state 
-     } )
+     } ).leftJoin( 'last_access', { 'job.id': 'last_access.job_ref'} )
       .then(function(coll){
+      coll.map( function(e) { 
+        let recent = false;
+        if( e.last_access !== null ) {
+          var access_tick = e.last_access.getTime();
+          var lastweek_tick = Date.now() - ( 3600 * 25 * 7 * 1000);
+          recent = (access_tick > lastweek_tick)?true:false;
+        }
+        e.recent = recent;
+        return e;
+      } );
       logger.info( coll );
       callback( {
         params: params,
