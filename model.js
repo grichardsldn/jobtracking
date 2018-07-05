@@ -76,6 +76,51 @@ module.exports = ( function() {
     } );
   };
 
+  //      RowDataPacket {
+//       state: 'OPEN',
+//       reopen_date: null,
+//       pending_what_text: null,
+//       description:
+//        'Going to record the people I received christmas cards from.',
+//       keywords: 'christmas card list',
+//       id: 290,
+//       title: 'Christmas Card List',
+//       created: 2010-01-14T00:00:00.000Z,
+//       jobtracking: 0,
+//       last_access: 2017-11-27T13:13:12.000Z,
+//       recent: false },
+
+  var listjobs2 = function( params, callback ) {
+    // params.state =
+
+    var knex = require('knex')({
+      client: 'mysql',
+      connection: {
+        host : '127.0.0.1',
+        user : 'jobtracking',
+        password : '',
+        database : 'jobtracking'
+      }
+    });
+
+    knex('job') .select({ 
+      id: 'id',
+      title: 'title',
+      state: 'state',
+     }).where( { 
+      state: params.state 
+     } )
+      .then(function(coll){
+      logger.info( coll );
+      callback( {
+        params: params,
+        jobs: coll,
+      } );
+      return 1;
+    });
+  };
+
+
   // id:
   // oldstate:
   // newstate:
@@ -248,7 +293,8 @@ module.exports = ( function() {
 
     do : function( command, params, callback ) {
       var cmds = { 
-        listjobs: listjobs,
+        listjobs: listjobs2,
+        listjobs2: listjobs2,
         getjobinfo: getjobinfo,
         getentriesforjob: getentriesforjob,
         addentry: addentry,
