@@ -103,16 +103,18 @@ module.exports = ( function() {
       }
     });
 
-    knex('job') .select({ 
+    let query = knex('job').select({ 
       id: 'id',
       title: 'title',
       state: 'state',
       last_access: 'last_access.last_access',
-     }).where( { 
-      state: params.state 
-     } ).leftJoin( 'last_access', { 'job.id': 'last_access.job_ref'} )
-      .orderBy( 'id', 'DESC' )
-      .then(function(coll){
+     })
+      .leftJoin( 'last_access', { 'job.id': 'last_access.job_ref'} )
+      .orderBy( 'id', 'DESC' );
+    if( params.state !== undefined ) {
+      query = query.where( { state: params.state } );
+    };
+    query.then(function(coll){
       coll.map( function(e) { 
         let recent = false;
         if( e.last_access !== null ) {
