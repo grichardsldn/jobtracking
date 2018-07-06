@@ -37,7 +37,7 @@ fs.readFile( config_filename, 'utf8', function( err, data ) {
   }
   logger.info("Started usemodel.js");
 
-  model.do( 'listjobs2', { state: 'OPEN' }, function( modelres ) {
+  model.do( 'getentriesforjob', { job_id: '542' }, function( modelres ) {
     logger.info( modelres );
   });
 });

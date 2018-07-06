@@ -33,6 +33,13 @@ module.exports = ( function() {
     //console.log(query.toQuery('mysql').values );   
   };
 
+  let knex = function( ) {
+    return require('knex')({
+      client: 'mysql',
+      connection: db_params,
+    });
+  }
+
   // The API calls:
 
   var listjobs = function( params, callback ) {
@@ -93,12 +100,7 @@ module.exports = ( function() {
   var listjobs2 = function( params, callback ) {
     // params.state =
 
-    var knex = require('knex')({
-      client: 'mysql',
-      connection: db_params,
-    });
-
-    let query = knex('job').select({ 
+    let query = knex()('job').select({ 
       id: 'id',
       title: 'title',
       state: 'state',
@@ -190,6 +192,18 @@ module.exports = ( function() {
       }
       callback( { params: params, entries: rows } );
     } );
+  };
+
+  var new_getentriesforjob = function( params, callback ) {
+    let query = knex()('entry').select({ job_ref: 'job_ref', entry: "entry", timestamp: "timestamp" })
+      .where( { job_ref: params.job_id } )
+      .orderBy( 'timestamp' );
+    query.then(function(coll){
+      callback( {
+        params: params,
+        entries: coll,
+      } );
+    });
   };
 
   // title
@@ -303,9 +317,8 @@ module.exports = ( function() {
     do : function( command, params, callback ) {
       var cmds = { 
         listjobs: listjobs2,
-        listjobs2: listjobs2,
         getjobinfo: getjobinfo,
-        getentriesforjob: getentriesforjob,
+        getentriesforjob: new_getentriesforjob,
         addentry: addentry,
         updateaccess: updateaccess,
         addjob: addjob,
