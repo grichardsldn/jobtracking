@@ -95,12 +95,7 @@ module.exports = ( function() {
 
     var knex = require('knex')({
       client: 'mysql',
-      connection: {
-        host : '127.0.0.1',
-        user : 'jobtracking',
-        password : '',
-        database : 'jobtracking'
-      }
+      connection: db_params,
     });
 
     let query = knex('job').select({ 
