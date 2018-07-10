@@ -94,7 +94,7 @@ module.exports = ( function() {
 
       app.get('/open', auth, function(req, res) {
         trace_req ( req );
-        model.do2( 'listjobs', { state: 'OPEN' } )
+        model.do( 'listjobs', { state: 'OPEN' } )
           .then( function( modelres ) {
           res.render('joblist', { 
             title: 'Open jobs',   
@@ -106,7 +106,7 @@ module.exports = ( function() {
 
       app.get('/all', auth, function(req, res) {
         trace_req ( req );
-        model.do2( 'listjobs', { })
+        model.do( 'listjobs', { })
           .then( function( modelres ) {
           res.render('joblist', { 
             title: 'All jobs',   
@@ -127,8 +127,8 @@ module.exports = ( function() {
         logger.info("Showing job " + id );
 
         Promise.all( [
-          model.do2( 'getjobinfo', { id: id }),
-          model.do2( 'getentriesforjob', { job_id: id } )
+          model.do( 'getjobinfo', { id: id }),
+          model.do( 'getentriesforjob', { job_id: id } )
         ] )
           .then( function( [ getjobinfo, getentries ] ) {
             var next_state = (getjobinfo.jobinfo.state == 'OPEN') ? 'CLOSED' : 'OPEN';
@@ -136,7 +136,7 @@ module.exports = ( function() {
               jobinfo: getjobinfo.jobinfo,
               next_state: next_state,
               entries: getentries.entries });
-            return model.do2( 'updateaccess', { job_id: id });
+            return model.do( 'updateaccess', { job_id: id });
           } )
           .then( function() { logger.info("updated access"); } );
       });
@@ -146,7 +146,7 @@ module.exports = ( function() {
         var id = req.params.id;
         var oldstate = req.params.oldstate;
         var newstate = req.params.newstate;
-        model.do2( 'setstate', { id: id, oldstate: oldstate, newstate: newstate })
+        model.do( 'setstate', { id: id, oldstate: oldstate, newstate: newstate })
           .then( function( ok ) {
           // ingore whether it worked
           res.redirect( '/show/' + id  );
@@ -157,7 +157,7 @@ module.exports = ( function() {
         trace_req ( req );
         var id = req.params.id;
         var entry = req.body.entry;
-        model.do2( 'addentry', { job_id: id, entry: entry })
+        model.do( 'addentry', { job_id: id, entry: entry })
           .then( function( addentry ) {
           res.redirect('/show/' + id + '#end');
         });
@@ -165,7 +165,7 @@ module.exports = ( function() {
 
       app.post('/addjob', auth, function( req, res ) {
         trace_req( req );
-        model.do2( 'addjob', {
+        model.do( 'addjob', {
           title: req.body.title,
           keywords: req.body.keywords,
           description: req.body.description
