@@ -3,7 +3,7 @@
 let jobtracking = require('./jobtracking_common.js')();
 
 jobtracking.init().then( function( { config, logger, model } ) {
-  model.do2( 'listjobs', { state: 'OPEN' } )
+  model.do( 'listjobs', { state: 'OPEN' } )
     .then ( function( modelres ) {
       logger.info( modelres );
     });
