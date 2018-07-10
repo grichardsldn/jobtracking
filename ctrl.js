@@ -94,7 +94,8 @@ module.exports = ( function() {
 
       app.get('/open', auth, function(req, res) {
         trace_req ( req );
-        model.do( 'listjobs', { state: 'OPEN' }, function( modelres ) {
+        model.do2( 'listjobs', { state: 'OPEN' } )
+          .then( function( modelres ) {
           res.render('joblist', { 
             title: 'Open jobs',   
             showstate: 0,
@@ -105,7 +106,8 @@ module.exports = ( function() {
 
       app.get('/all', auth, function(req, res) {
         trace_req ( req );
-        model.do( 'listjobs', { }, function( modelres ) {
+        model.do2( 'listjobs', { })
+          .then( function( modelres ) {
           res.render('joblist', { 
             title: 'All jobs',   
             showstate: 1,
@@ -124,16 +126,19 @@ module.exports = ( function() {
         var id = req.params.id;
         logger.info("Showing job " + id );
 
-        model.do( 'getjobinfo', { id: id }, function( getjobinfo ) {
-          var next_state = (getjobinfo.jobinfo.state == 'OPEN') ? 'CLOSED' : 'OPEN';
-          model.do( 'getentriesforjob', { job_id: id }, function(getentries) {
+        Promise.all( [
+          model.do2( 'getjobinfo', { id: id }),
+          model.do2( 'getentriesforjob', { job_id: id } )
+        ] )
+          .then( function( [ getjobinfo, getentries ] ) {
+            var next_state = (getjobinfo.jobinfo.state == 'OPEN') ? 'CLOSED' : 'OPEN';
             res.render('show', {
               jobinfo: getjobinfo.jobinfo,
               next_state: next_state,
               entries: getentries.entries });
-            model.do( 'updateaccess', { job_id: id }, function() {} );
-          });
-        });
+            return model.do2( 'updateaccess', { job_id: id });
+          } )
+          .then( function() { logger.info("updated access"); } );
       });
 
       app.get('/command/setstate/:id/:oldstate/:newstate', auth, function( req, res ) {
@@ -141,7 +146,8 @@ module.exports = ( function() {
         var id = req.params.id;
         var oldstate = req.params.oldstate;
         var newstate = req.params.newstate;
-        model.do( 'setstate', { id: id, oldstate: oldstate, newstate: newstate }, function( ok ) {
+        model.do2( 'setstate', { id: id, oldstate: oldstate, newstate: newstate })
+          .then( function( ok ) {
           // ingore whether it worked
           res.redirect( '/show/' + id  );
         });
@@ -151,18 +157,20 @@ module.exports = ( function() {
         trace_req ( req );
         var id = req.params.id;
         var entry = req.body.entry;
-        model.do( 'addentry', { job_id: id, entry: entry }, function( addentry ) {
+        model.do2( 'addentry', { job_id: id, entry: entry })
+          .then( function( addentry ) {
           res.redirect('/show/' + id + '#end');
         });
       });
 
       app.post('/addjob', auth, function( req, res ) {
         trace_req( req );
-        model.do( 'addjob', {
+        model.do2( 'addjob', {
           title: req.body.title,
           keywords: req.body.keywords,
           description: req.body.description
-        }, function( addjobres ) {
+        })
+        .then( function( addjobres ) {
           res.redirect('/show/' + addjobres.created_id );
         });
       });
