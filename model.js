@@ -314,6 +314,21 @@ module.exports = ( function() {
       });
     },
 
+    do2 : function( command, params, callback ) {
+      var cmds = { 
+        listjobs: listjobs2,
+        getjobinfo: getjobinfo,
+        getentriesforjob: new_getentriesforjob,
+        addentry: addentry,
+        updateaccess: updateaccess,
+        addjob: addjob,
+        setstate: setstate
+      };
+      return new Promise( function( resolve, reject ) {
+        cmds[command]( params, resolve );
+      } );
+    },
+
     do : function( command, params, callback ) {
       var cmds = { 
         listjobs: listjobs2,
