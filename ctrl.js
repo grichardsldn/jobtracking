@@ -121,6 +121,15 @@ module.exports = ( function() {
         res.render( 'create', { } );
       });
 
+      app.get('/rest/jobinfo/:id', auth, function( req, res) {
+        const id = req.params.id;
+        Promise.all( [
+          model.do( 'getjobinfo', { id: id } )
+        ] ).then( function( [ getjobinfo ] ) {
+          res.status(200).send( getjobinfo );
+        } );
+      }); 
+
       app.get('/show/:id', auth, function(req, res){
         trace_req ( req );
         var id = req.params.id;
