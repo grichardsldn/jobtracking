@@ -121,7 +121,7 @@ module.exports = ( function() {
         res.render( 'create', { } );
       });
 
-      app.get('/rest/jobinfo/:id', auth, function( req, res) {
+      app.get('/rest/jobs/:id/info', auth, function( req, res) {
         const id = req.params.id;
         Promise.all( [
           model.do( 'getjobinfo', { id: id } )
@@ -129,6 +129,14 @@ module.exports = ( function() {
           res.status(200).send( getjobinfo );
         } );
       }); 
+
+      app.get('/rest/jobs', auth, function( req, res) {
+        model.do( 'listjobs', { })
+        .then( function( modelres ) {
+          res.status(200).send( modelres.jobs );
+        });
+      });
+
 
       app.get('/show/:id', auth, function(req, res){
         trace_req ( req );
