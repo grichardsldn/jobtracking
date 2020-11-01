@@ -2,7 +2,8 @@
 
 module.exports = ( function() {
   var connection;
-  var mysql = require('mysql');
+  const mariadb = require('mariadb/callback');
+
   var db_params;
 
   var log4js = require('log4js');
@@ -289,7 +290,7 @@ module.exports = ( function() {
       logger.trace( "connect()" );
       var me = this;
       db_params = params;  
-      connection = mysql.createConnection( db_params );
+      connection = mariadb.createConnection( db_params );
       connection.connect( function( err )   {
         if( err ) {
           logger.fatal("Connection failed, aborting: " + err );
