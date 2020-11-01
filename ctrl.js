@@ -132,11 +132,19 @@ module.exports = ( function() {
         ] )
           .then( function( [ getjobinfo, getentries ] ) {
             var next_state = (getjobinfo.jobinfo.state == 'OPEN') ? 'CLOSED' : 'OPEN';
-            res.render('show', {
-              jobinfo: getjobinfo.jobinfo,
-              next_state: next_state,
-              entries: getentries.entries });
-            return model.do( 'updateaccess', { job_id: id });
+	    if (req.headers.accept === 'application/json') {
+	      res.send(JSON.stringify(
+		{ 
+		  jobinfo: getjobinfo.jobinfo, 
+		  entries: getentries.entries
+  		}));
+	    } else {
+              res.render('show', {
+                jobinfo: getjobinfo.jobinfo,
+                next_state: next_state,
+                entries: getentries.entries });
+              return model.do( 'updateaccess', { job_id: id });
+	    }
           } )
           .then( function() { logger.info("updated access"); } );
       });
